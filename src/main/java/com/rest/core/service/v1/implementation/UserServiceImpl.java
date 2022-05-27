@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +76,9 @@ public class UserServiceImpl implements UserService {
             case UNVERIFIED -> throw new CaughtException("UNVERIFIED_ACCOUNT","Account is not verified yet !",appuser.getId().toString());
             case BANNED -> {
                 AccountBanData banData = accountBanDataRepository.findByUserId(appuser.getId());
-                throw new CaughtException("BANNED",String.format("Account is banned until %s",banData.getBan_date()));
+                String formattedDate = DateTimeFormatter.RFC_1123_DATE_TIME.format(banData.getBanned_until()) ;
+                throw new CaughtException("BANNED",String.format("Account is banned until %s",
+                        formattedDate));
             }
         }
         Algorithm algorithm = Algorithm.HMAC256(Constant.SECRET.getBytes(StandardCharsets.UTF_8)) ;

@@ -41,8 +41,8 @@ public class AdminServiceImpl implements AdminService {
         AccountBanData banData = AccountBanData.builder()
                 .userId(request.getUser_id())
                 .adminId(request.getAdmin_id())
-                .ban_date(LocalDate.now())
-                .banned_until(LocalDate.now().plus(Period.ofDays(request.getBan_period())))
+                .ban_date(LocalDateTime.now())
+                .banned_until(LocalDateTime.now().plus(Period.ofDays(request.getBan_period())))
                 .reason(request.getReason())
                 .build();
         accountBanDataRepository.save(banData) ;

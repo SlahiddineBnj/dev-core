@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
             case UNVERIFIED -> throw new CaughtException("UNVERIFIED_ACCOUNT","Account is not verified yet !",appuser.getId().toString());
             case BANNED -> {
                 AccountBanData banData = accountBanDataRepository.findByUserId(appuser.getId());
-                String formattedDate = DateTimeFormatter.RFC_1123_DATE_TIME.format(banData.getBanned_until()) ;
+                String formattedDate = DateTimeFormatter.ISO_LOCAL_TIME.format(banData.getBanned_until()) ;
                 throw new CaughtException("BANNED",String.format("Account is banned until %s",
                         formattedDate));
             }

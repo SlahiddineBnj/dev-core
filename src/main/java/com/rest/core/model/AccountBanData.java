@@ -22,8 +22,8 @@ public class AccountBanData {
 
     private UUID userId   ;
     private UUID adminId ;
-    private LocalDate ban_date ;
-    private LocalDate banned_until ;
+    private LocalDateTime ban_date ;
+    private LocalDateTime banned_until ;
     private String reason ;
 
 }

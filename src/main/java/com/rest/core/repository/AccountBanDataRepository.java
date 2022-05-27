@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface AccountBanDataRepository extends JpaRepository<AccountBanData,Long> {
-    AccountBanData findByUser_id(UUID user_id) ;
+    AccountBanData findByUserId(UUID user_id) ;
 }

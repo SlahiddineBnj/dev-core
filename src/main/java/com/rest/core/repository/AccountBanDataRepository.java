@@ -5,7 +5,9 @@ import com.rest.core.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public interface AccountBanDataRepository extends JpaRepository<AccountBanData,Long> {
-    AccountBanData findByUser(AppUser user) ;
+    AccountBanData findByUser_id(UUID user_id) ;
 }

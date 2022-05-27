@@ -3,6 +3,7 @@ package com.rest.core.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,8 +22,8 @@ public class AccountBanData {
 
     private UUID userId   ;
     private UUID adminId ;
-    private LocalDateTime ban_date ;
-    private LocalDateTime banned_until ;
+    private LocalDate ban_date ;
+    private LocalDate banned_until ;
     private String reason ;
 
 }

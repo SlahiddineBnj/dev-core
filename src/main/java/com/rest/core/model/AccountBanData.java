@@ -1,27 +1,28 @@
 package com.rest.core.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountBanData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
 
-    @OneToOne
-    private AppUser user ;
 
+    private UUID user_id   ;
+    private UUID admin_id ;
     private LocalDateTime ban_date ;
-
     private LocalDateTime banned_until ;
+    private String reason ;
+
 }

@@ -1,6 +1,6 @@
 package com.rest.core.model;
 
-import com.rest.core.enum22.AccountState;
+import com.rest.core.Enum.AccountState;
 import com.rest.core.util.Auditable;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

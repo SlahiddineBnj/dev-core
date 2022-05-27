@@ -9,7 +9,7 @@ import com.rest.core.dto.response.RequestResponse;
 import com.rest.core.dto.authentication.AuthenticationRequest;
 import com.rest.core.dto.authentication.AuthenticationResponse;
 import com.rest.core.dto.authentication.SignupRequest;
-import com.rest.core.enum22.AccountState;
+import com.rest.core.Enum.AccountState;
 import com.rest.core.exception.CaughtException;
 import com.rest.core.model.AccountBanData;
 import com.rest.core.model.AccountVerificationCode;
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
         } catch (BadCredentialsException e){
-            throw new CaughtException("UNVERIFIED_CREDENTIALS","You have entered incorrect credentials !") ;
+            throw new CaughtException("INCORRECT_CREDENTIALS","You have entered incorrect credentials !") ;
         }
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(request.getUsername());
         AppUser appuser = userRepository.findByUsername(userDetails.getUsername()).get() ;
@@ -75,8 +75,7 @@ public class UserServiceImpl implements UserService {
             case UNVERIFIED -> throw new CaughtException("UNVERIFIED_ACCOUNT","Account is not verified yet !",appuser.getId().toString());
             case BANNED -> {
                 AccountBanData banData = accountBanDataRepository.findByUser(appuser);
-                //todo - finish here1
-                throw new CaughtException("BANNED","Account is banned !");
+                throw new CaughtException("BANNED",String.format("Account is banned until %s",banData.getBan_date()));
             }
         }
         Algorithm algorithm = Algorithm.HMAC256(Constant.SECRET.getBytes(StandardCharsets.UTF_8)) ;

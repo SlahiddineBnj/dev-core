@@ -1,4 +1,4 @@
-package com.rest.core.enum22;
+package com.rest.core.Enum;
 
 public enum AccountState {
     ACTIVE,BANNED,UNVERIFIED

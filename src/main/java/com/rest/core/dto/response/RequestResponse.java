@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class RequestResponse {
 
     private String message ;
+    private String extra  = "";
     private LocalDateTime timestamp ;
 
 }

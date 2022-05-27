@@ -20,7 +20,7 @@ public class CaughtException extends RuntimeException{
         this.status = status ;
         this.message = message ;
         this.timestamp  = LocalDateTime.now() ;
-        this.extra = "EMPTY" ;
+        this.extra = "" ;
     }
 
     public CaughtException(String status , String message , String extra){

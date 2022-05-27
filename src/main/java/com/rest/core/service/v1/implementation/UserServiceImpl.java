@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
 
             RequestResponse response = RequestResponse.builder()
                     .message("You account been registered successfully !")
+                    .extra(appUser.getId().toString())
                     .timestamp(LocalDateTime.now())
                     .build();
 

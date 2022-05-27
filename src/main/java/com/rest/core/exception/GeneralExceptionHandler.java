@@ -18,6 +18,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ErrorDTO.builder()
                 .status(exception.getStatus())
                 .message(exception.getMessage())
+                .extra(exception.getExtra())
                 .timestamp(exception.getTimestamp())
                 .build(), badRequest);
     }

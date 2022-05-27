@@ -1,6 +1,7 @@
 package com.rest.core.boot;
 
 
+import com.rest.core.Enum.AccountState;
 import com.rest.core.model.AppUser;
 import com.rest.core.model.Role;
 import com.rest.core.repository.RoleRepository;
@@ -48,6 +49,7 @@ public class BootBeans {
                 .username("admin")
                 .password(new BCryptPasswordEncoder().encode("admin"))
                 .email("slahiddinebnj123@gmail.com")
+                .state(AccountState.ACTIVE)
                 .roles(List.of(admin_role))
                 .build() ;
         userRepository.save(admin) ;

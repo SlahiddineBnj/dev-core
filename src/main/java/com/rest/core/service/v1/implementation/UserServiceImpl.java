@@ -67,17 +67,17 @@ public class UserServiceImpl implements UserService {
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
         } catch (BadCredentialsException e){
-            throw new CaughtException("You have entered incorrect credentials !") ;
+            throw new CaughtException("UNVERIFIED_CREDENTIALS","You have entered incorrect credentials !") ;
         }
         final UserDetails userDetails = myUserDetailsService.loadUserByUsername(request.getUsername());
         AppUser appuser = userRepository.findByUsername(userDetails.getUsername()).get() ;
-        switch (appuser.getState()){
-            case UNVERIFIED:
-                throw new CaughtException("Account is not verified yet !") ;
-            case BANNED:
-                AccountBanData banData = accountBanDataRepository.findByUser(appuser) ; 
-                //todo - finish here
-                throw new CaughtException("Account is banned !") ;
+        switch (appuser.getState()) {
+            case UNVERIFIED -> throw new CaughtException("UNVERIFIED_ACCOUNT","Account is not verified yet !",appuser.getId().toString());
+            case BANNED -> {
+                AccountBanData banData = accountBanDataRepository.findByUser(appuser);
+                //todo - finish here1
+                throw new CaughtException("BANNED","Account is banned !");
+            }
         }
         Algorithm algorithm = Algorithm.HMAC256(Constant.SECRET.getBytes(StandardCharsets.UTF_8)) ;
         Date expiryDate = new Date(System.currentTimeMillis()+ Constant.TOKEN_DURATION *60*1000) ;
@@ -103,10 +103,10 @@ public class UserServiceImpl implements UserService {
         List<String> errors_list = Validator.ValidateSignup(request) ;
         // we validate the request
         if(errors_list.size() != 0 ){
-            throw new CaughtException("Unable to register new account , reasons "+errors_list) ;
+            throw new CaughtException("REGISTER_FAIL","Unable to register new account , reasons "+errors_list) ;
         }
         if (userRepository.findByUsername(request.getUsername()).isPresent()){
-            throw new CaughtException("An account with the same username already exists !") ;
+            throw new CaughtException("USERNAME_EXISTS","An account with the same username already exists !") ;
         }else {
             // username does not exist
             AppUser appUser = SignupRequest.convertToEntity(request) ;
@@ -120,10 +120,10 @@ public class UserServiceImpl implements UserService {
             EmailData emailData = EmailData.builder()
                     .to(request.getEmail())
                     .subject("Registration")
-                    .body("PLACEHOLDER")
+                    .body("code = "+verification_code)
                     .timestamp(LocalDateTime.now())
                     .build();
-//            emailService.sendEmail(emailData);
+            emailService.sendEmail(emailData);
 
             accountVerificationCodeRepository.save(AccountVerificationCode.builder()
                     .user(appUser)
@@ -131,7 +131,6 @@ public class UserServiceImpl implements UserService {
                     .build()) ;
 
             RequestResponse response = RequestResponse.builder()
-                    .status_code(HttpStatus.OK)
                     .message("You account been registered successfully !")
                     .timestamp(LocalDateTime.now())
                     .build();
@@ -145,12 +144,12 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<RequestResponse> verifyAccount(AccountVerificationRequest request) {
         boolean user_exist = userRepository.existsById(request.getUser_id());
         if (!user_exist)
-            throw new CaughtException("User does not exist !");
+            throw new CaughtException("INVALID_USER","User does not exist !");
         AppUser user = userRepository.findById(request.getUser_id()).get();
         Optional<AccountVerificationCode> codeOptional =
                 accountVerificationCodeRepository.findByUser(user);
         if (codeOptional.isEmpty())
-            throw new CaughtException("Verification code does not exist !");
+            throw new CaughtException("INVALID_CODE","Verification code does not exist !");
         else {
             // we need to check the code
             if (Objects.equals(codeOptional.get().getVerification_code(),
@@ -159,16 +158,11 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user) ;
                 RequestResponse response = RequestResponse.builder()
                         .message("Your account has been verified successfully !")
-                        .status_code(HttpStatus.OK)
                         .timestamp(LocalDateTime.now())
                         .build();
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }else {
-                return new ResponseEntity<>(RequestResponse.builder()
-                        .message("Incorrect Attempt")
-                        .status_code(HttpStatus.BAD_REQUEST)
-                        .timestamp(LocalDateTime.now())
-                        .build(), HttpStatus.BAD_REQUEST);
+                throw new CaughtException("INCORRECT_ATTEMPT","Incorrect Attempt !") ;
             }
         }
     }

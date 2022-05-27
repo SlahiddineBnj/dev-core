@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RequestResponse {
 
-    private HttpStatus status_code ;
     private String message ;
     private LocalDateTime timestamp ;
 

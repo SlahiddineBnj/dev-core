@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorDTO {
+    private String status ;
     private String message  ;
     private LocalDateTime timestamp ;
 }

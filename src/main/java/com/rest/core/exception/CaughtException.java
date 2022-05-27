@@ -11,11 +11,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CaughtException extends RuntimeException{
 
+    private String status ;
     private String message ;
+    private String extra ;
     private LocalDateTime timestamp ;
 
-    public CaughtException(String message) {
+    public CaughtException(String status , String message) {
+        this.status = status ;
         this.message = message ;
         this.timestamp  = LocalDateTime.now() ;
+        this.extra = "EMPTY" ;
+    }
+
+    public CaughtException(String status , String message , String extra){
+        this.status = status ;
+        this.message = message ;
+        this.timestamp  = LocalDateTime.now() ;
+        this.extra = extra ;
     }
 }

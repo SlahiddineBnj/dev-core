@@ -16,6 +16,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleException(CaughtException exception) {
         final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(ErrorDTO.builder()
+                .status(exception.getStatus())
                 .message(exception.getMessage())
                 .timestamp(exception.getTimestamp())
                 .build(), badRequest);

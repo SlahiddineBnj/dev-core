@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
     private AccountBanDataRepository accountBanDataRepository ;
     @Autowired
     private EmailService emailService ;
+    @Autowired
+    private HTMLEngine htmlEngine ;
 
 
 
@@ -117,8 +119,8 @@ public class UserServiceImpl implements UserService {
 
             String verification_code = String.valueOf((int)(Math.random() * (999999 - 100000)) + 100000) ;
 
-            Document htmlDoc = HTMLEngine.getDocument("signup_letter.html") ;
-            String htmlString = HTMLEngine.injectValues(htmlDoc,
+            Document htmlDoc = htmlEngine.getDocument("signup_letter.html") ;
+            String htmlString = htmlEngine.injectValues(htmlDoc,
                     Map.of("#firstName", appUser.getFirstName(),
                     "#username", appUser.getUsername(),
                     "#verification_code",verification_code)) ;

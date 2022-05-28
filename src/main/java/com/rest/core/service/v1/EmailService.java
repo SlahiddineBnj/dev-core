@@ -6,5 +6,5 @@ import javax.mail.MessagingException;
 
 public interface EmailService {
 
-    void sendEmail(EmailData emailData) throws MessagingException;
+    void sendEmail(EmailData emailData,Boolean isHtml) throws MessagingException;
 }

@@ -118,18 +118,19 @@ public class UserServiceImpl implements UserService {
             String verification_code = String.valueOf((int)(Math.random() * (999999 - 100000)) + 100000) ;
 
             Document htmlDoc = HTMLEngine.getDocument("signup_letter.html") ;
-            String htmlString = HTMLEngine.injectValues(htmlDoc, Map.of("firstName", appUser.getFirstName(),
-                    "username", appUser.getUsername(),
-                    "verification_code",verification_code)) ;
+            String htmlString = HTMLEngine.injectValues(htmlDoc,
+                    Map.of("#firstName", appUser.getFirstName(),
+                    "#username", appUser.getUsername(),
+                    "#verification_code",verification_code)) ;
 
             EmailData emailData = EmailData.builder()
                     .to(request.getEmail())
-                    .subject("Registration")
+                    .subject("Registration Successful !")
                     .body(htmlString)
                     .timestamp(LocalDateTime.now())
                     .build();
 
-            emailService.sendEmail(emailData);
+            emailService.sendEmail(emailData,true);
 
             accountVerificationCodeRepository.save(AccountVerificationCode.builder()
                     .user(appUser)

@@ -20,14 +20,14 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendEmail(EmailData emailData) throws MessagingException {
+    public void sendEmail(EmailData emailData , Boolean isHtml) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         message.setSubject(emailData.getSubject());
         MimeMessageHelper helper;
         helper = new MimeMessageHelper(message, true);
         helper.setFrom(Constant.SMTP_USERNAME);
         helper.setTo(emailData.getTo());
-        helper.setText(emailData.getBody().toString()) ;
+        helper.setText(emailData.getBody().toString(),isHtml) ;
         emailSender.send(message);
         }
 

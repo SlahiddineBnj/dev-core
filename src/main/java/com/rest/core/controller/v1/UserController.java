@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping(value = Constant.API_PATH + "/user")
@@ -32,7 +34,7 @@ public class UserController implements UserAPI {
 
     @Override
     @PostMapping(value = "/register")
-    public ResponseEntity<RequestResponse> signup(@RequestBody SignupRequest request) throws MessagingException {
+    public ResponseEntity<RequestResponse> signup(@RequestBody SignupRequest request) throws MessagingException, URISyntaxException, IOException {
         return userService.signup(request);
     }
 

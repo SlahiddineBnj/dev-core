@@ -22,7 +22,9 @@ import com.rest.core.security.MyUserDetailsService;
 import com.rest.core.service.v1.EmailService;
 import com.rest.core.service.v1.RoleService;
 import com.rest.core.service.v1.UserService;
+import com.rest.core.util.HTMLEngine;
 import com.rest.core.validation.Validator;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +36,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<RequestResponse> signup(SignupRequest request) throws MessagingException {
+    public ResponseEntity<RequestResponse> signup(SignupRequest request) throws MessagingException, URISyntaxException, IOException {
         List<String> errors_list = Validator.ValidateSignup(request) ;
         // we validate the request
         if(errors_list.size() != 0 ){
@@ -116,12 +117,18 @@ public class UserServiceImpl implements UserService {
 
             String verification_code = String.valueOf((int)(Math.random() * (999999 - 100000)) + 100000) ;
 
+            Document htmlDoc = HTMLEngine.getDocument("signup_letter.html") ;
+            String htmlString = HTMLEngine.injectValues(htmlDoc, Map.of("firstName", appUser.getFirstName(),
+                    "username", appUser.getUsername(),
+                    "verification_code",verification_code)) ;
+
             EmailData emailData = EmailData.builder()
                     .to(request.getEmail())
                     .subject("Registration")
-                    .body("code = "+verification_code)
+                    .body(htmlString)
                     .timestamp(LocalDateTime.now())
                     .build();
+
             emailService.sendEmail(emailData);
 
             accountVerificationCodeRepository.save(AccountVerificationCode.builder()
@@ -156,6 +163,7 @@ public class UserServiceImpl implements UserService {
                     request.getVerification_code())) {
                 user.setState(AccountState.ACTIVE);
                 userRepository.save(user) ;
+                accountVerificationCodeRepository.delete(codeOptional.get());
                 RequestResponse response = RequestResponse.builder()
                         .message("Your account has been verified successfully !")
                         .timestamp(LocalDateTime.now())

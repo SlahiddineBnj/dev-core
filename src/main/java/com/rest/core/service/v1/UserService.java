@@ -8,12 +8,14 @@ import com.rest.core.dto.authentication.SignupRequest;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public interface UserService {
 
     ResponseEntity<AuthenticationResponse> login(AuthenticationRequest request)  ;
 
-    ResponseEntity<RequestResponse> signup(SignupRequest request) throws MessagingException;
+    ResponseEntity<RequestResponse> signup(SignupRequest request) throws MessagingException, URISyntaxException, IOException;
 
     ResponseEntity<RequestResponse> verifyAccount(AccountVerificationRequest request) ;
 }

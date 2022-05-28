@@ -7,10 +7,9 @@ import com.rest.core.dto.response.RequestResponse;
 import com.rest.core.service.v1.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(Constant.API_PATH+ "/admin")
@@ -23,5 +22,11 @@ public class AdminController implements AdminAPI {
     @PostMapping("/ban")
     public ResponseEntity<RequestResponse> banUser(@RequestBody BanRequest request) {
         return adminService.banUser(request);
+    }
+
+    @Override
+    @PutMapping("/unban/{user_id}")
+    public ResponseEntity<RequestResponse> unbanUser(@PathVariable UUID user_id) {
+        return adminService.unbanUser(user_id);
     }
 }

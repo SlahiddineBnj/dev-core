@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Builder
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserDetails {
 
+    private UUID user_id ;
     private String firstName  ;
     private String lastName ;
     private List<String> roles ;
@@ -23,6 +25,7 @@ public class UserDetails {
 
     public static UserDetails convertToDto(AppUser appUser ) {
         return  UserDetails.builder()
+                .user_id(appUser.getId())
                 .firstName(appUser.getFirstName())
                 .lastName(appUser.getLastName())
                 .roles(appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))

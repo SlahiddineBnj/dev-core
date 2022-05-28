@@ -36,7 +36,6 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -91,7 +90,6 @@ public class UserServiceImpl implements UserService {
 
 
         AuthenticationResponse response = AuthenticationResponse.builder()
-                .user_id(appuser.getId())
                 .token(access_token)
                 .token_expiry(expiryDate)
                 .userDetails(com.rest.core.dto.authentication.UserDTO.UserDetails.convertToDto(appuser))
@@ -104,10 +102,10 @@ public class UserServiceImpl implements UserService {
         List<String> errors_list = Validator.ValidateSignup(request) ;
         // we validate the request
         if(errors_list.size() != 0 ){
-            throw new CaughtException("REGISTER_FAIL","Unable to register new account , reasons "+errors_list) ;
+            throw new CaughtException("ERROR","Unable to register new account , reasons "+errors_list) ;
         }
         if (userRepository.findByUsername(request.getUsername()).isPresent()){
-            throw new CaughtException("USERNAME_EXISTS","An account with the same username already exists !") ;
+            throw new CaughtException("ERROR","An account with the same username already exists !") ;
         }else {
             // username does not exist
             AppUser appUser = SignupRequest.convertToEntity(request) ;

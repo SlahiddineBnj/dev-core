@@ -16,7 +16,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AuthenticationResponse {
 
-    private UUID user_id ;
     private String token ;
     private Date token_expiry ;
     private UserDetails userDetails ;

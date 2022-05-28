@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface AccountBanDataRepository extends JpaRepository<AccountBanData,Long> {
     AccountBanData findByUserId(UUID user_id) ;
+    void deleteAccountBanDataByUserId(UUID user_id) ;
 }

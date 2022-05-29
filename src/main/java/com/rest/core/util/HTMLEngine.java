@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class HTMLEngine {
@@ -23,8 +24,8 @@ public class HTMLEngine {
 
 
     public Document getDocument(String fileName) throws URISyntaxException, IOException {
-        URL path = getClass().getResource(String.format("static/html_documents/%s",fileName));
-        File input = new File(path.toURI());
+        URL path = getClass().getClassLoader().getResource(String.format("static/html_documents/%s",fileName));
+        File input = new File(Objects.requireNonNull(path).toURI());
         return Jsoup.parse(input, "UTF-8") ;
     }
 

@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 public class HTMLEngine {
@@ -22,11 +22,26 @@ public class HTMLEngine {
     }
 
 
-
     public Document getDocument(String fileName) throws URISyntaxException, IOException {
-        URL path = getClass().getClassLoader().getResource(String.format("static/html_documents/%s",fileName));
-        File input = new File(Objects.requireNonNull(path).toURI());
-        return Jsoup.parse(input, "UTF-8") ;
+//        File input = new File(Objects.requireNonNull(ClassLoader
+//                .getSystemResource(String.format("static/html_documents/%s", fileName))).toExternalForm());
+        URI uri = URI.create("https://store4.gofile.io/download/3b3a271d-d3d8-41f1-8ee6-713bf6e0ffbc/") ;
+        URL url = new URL(uri.toURL(), "signup_letter.html") ;
+        System.out.println(url.toString());
+//        URL url = new URL("https://store4.gofile.io/download/3b3a271d-d3d8-41f1-8ee6-713bf6e0ffbc/signup_letter.html") ;
+//        String tmpPath = System.getProperty("java.io.tmpDir") ;
+//        String path = tmpPath + "tmp_letter.html" ;
+//        File input = new File(Objects.requireNonNull(path).toURI());
+//        input.deleteOnExit();
+        File file = new File(url.getFile()) ;
+        if (file.exists()) {
+            System.out.println("file "+file);
+        }
+//        file.deleteOnExit();
+
+//        FileUtils.copyURLToFile(url,file);
+
+        return Jsoup.parse(file, "UTF-8") ;
     }
 
 

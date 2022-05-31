@@ -21,7 +21,7 @@ public class SchedulerServiceImpl {
     private AccountBanDataRepository accountBanDataRepository ;
 
 
-    @Scheduled(cron = "")
+    @Scheduled(fixedDelay = 1000*60*60*24)
     private void unbanUsersWhenTimeComes(){
         List<AppUser> bannedUsers = userRepository.findAllByState(AccountState.BANNED) ;
         for (AppUser user: bannedUsers) {

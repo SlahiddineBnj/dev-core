@@ -21,7 +21,7 @@ public class NewReportTicket {
         return ReportTicket.builder()
                 .reporter_user_id(this.getReporter_user_id())
                 .reported_user_id(this.getReported_user_id())
-                .description(this.getDescription())
+                .ticket_description(this.getDescription())
                 .status(ReportTicketStatus.UNTREATED)
                 .build();
     }

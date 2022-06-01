@@ -10,6 +10,7 @@ import com.rest.core.dto.authentication.AuthenticationRequest;
 import com.rest.core.dto.authentication.AuthenticationResponse;
 import com.rest.core.dto.authentication.SignupRequest;
 import com.rest.core.Enum.AccountState;
+import com.rest.core.dto.ticket.NewReportTicket;
 import com.rest.core.exception.CaughtException;
 import com.rest.core.model.AccountBanData;
 import com.rest.core.model.AccountVerificationCode;
@@ -20,6 +21,7 @@ import com.rest.core.repository.AccountVerificationCodeRepository;
 import com.rest.core.repository.UserRepository;
 import com.rest.core.security.MyUserDetailsService;
 import com.rest.core.service.v1.EmailService;
+import com.rest.core.service.v1.ReportTicketService;
 import com.rest.core.service.v1.RoleService;
 import com.rest.core.service.v1.UserService;
 import com.rest.core.util.HTMLEngine;
@@ -62,7 +64,8 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService ;
     @Autowired
     private HTMLEngine htmlEngine ;
-
+    @Autowired
+    private ReportTicketService reportTicketService ;
 
 
     @Override
@@ -176,6 +179,11 @@ public class UserServiceImpl implements UserService {
                 throw new CaughtException("INCORRECT_ATTEMPT","Incorrect Attempt !") ;
             }
         }
+    }
+
+    @Override
+    public ResponseEntity<RequestResponse> submitReportTicket(NewReportTicket ticket) {
+        return reportTicketService.createTicket(ticket) ;
     }
 
 }

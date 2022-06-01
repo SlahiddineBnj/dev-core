@@ -14,5 +14,5 @@ public interface AdminService {
 
     ResponseEntity<RequestResponse> unbanUser(UUID user_id) ;
 
-    Page<UserDetails> searchUsers(String searchQuery) ;
+    Page<UserDetails> searchUsers(String searchQuery , int page , int size) ;
 }

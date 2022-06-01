@@ -12,12 +12,15 @@ import com.rest.core.repository.UserRepository;
 import com.rest.core.service.v1.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -39,6 +42,7 @@ public class AdminServiceImpl implements AdminService {
             throw new CaughtException("ERROR","Admin does not exist !") ;
         // all good
         AppUser user = userRepository.findById(request.getUser_id()).get() ;
+
         accountBanDataRepository.save(AccountBanData.builder()
                 .userId(request.getUser_id())
                 .adminId(request.getAdmin_id())
@@ -47,6 +51,10 @@ public class AdminServiceImpl implements AdminService {
                 .reason(request.getReason())
                 .build()) ;
         user.setState(AccountState.BANNED);
+
+        // increment ban counter
+        user.setBan_counter(user.getBan_counter()+1);
+
         userRepository.save(user) ;
         RequestResponse response = RequestResponse.builder()
                 .message(String.format("User %s have been banned for %s days ",user.getUsername(),
@@ -77,7 +85,19 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<UserDetails> searchUsers(String searchQuery) {
-        return null;
+    public Page<UserDetails> searchUsers(String searchQuery, int page , int size) {
+        Pageable pageable  = PageRequest.of(page , size) ;
+        return userRepository
+                .findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrUsernameContainingIgnoreCase
+                        (searchQuery,
+                        searchQuery,
+                        searchQuery,
+                        pageable)
+                        .map(new Function<AppUser, UserDetails>() {
+                    @Override
+                    public UserDetails apply(AppUser appUser) {
+                        return UserDetails.convertToDto(appUser);
+                    }
+                });
     }
 }

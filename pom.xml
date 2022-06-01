@@ -14,7 +14,7 @@
 	<name>main class</name>
 	<description>REST API Core by Pegasus</description>
 	<properties>
-		<java.version>11s</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

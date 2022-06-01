@@ -2,6 +2,8 @@ package com.rest.core.repository;
 
 import com.rest.core.Enum.AccountState;
 import com.rest.core.model.AppUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +15,6 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<AppUser, UUID>{
     Optional<AppUser> findByUsername(String username) ;
     List<AppUser> findAllByState(AccountState state) ;
+
+    Page<AppUser> findAllByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrUsernameContainingIgnoreCase(String firstName , String lastName , String username , Pageable pageable) ;
 }

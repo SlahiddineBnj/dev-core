@@ -37,6 +37,7 @@ public class AppUser extends Auditable implements UserDetails {
 
     private AccountState state ;
 
+    private Long ban_counter ;
     @ManyToMany
     private List<Role> roles   = new ArrayList<>();
 

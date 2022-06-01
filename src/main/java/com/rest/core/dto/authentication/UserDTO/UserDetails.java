@@ -21,6 +21,7 @@ public class UserDetails {
     private String firstName  ;
     private String lastName ;
     private List<String> roles ;
+    private Long ban_counter  ;
     // etc
 
     public static UserDetails convertToDto(AppUser appUser ) {
@@ -29,6 +30,7 @@ public class UserDetails {
                 .firstName(appUser.getFirstName())
                 .lastName(appUser.getLastName())
                 .roles(appUser.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                .ban_counter(appUser.getBan_counter())
                 .build() ;
     }
 }

@@ -7,6 +7,8 @@ import com.rest.core.dto.response.RequestResponse;
 import com.rest.core.dto.authentication.AuthenticationRequest;
 import com.rest.core.dto.authentication.AuthenticationResponse;
 import com.rest.core.dto.authentication.SignupRequest;
+import com.rest.core.dto.ticket.NewReportTicket;
+import com.rest.core.service.v1.ReportTicketService;
 import com.rest.core.service.v1.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class UserController implements UserAPI {
 
     @Autowired
     private UserService userService ;
+    @Autowired
+    private ReportTicketService reportTicketService ;
 
     @Override
     @PostMapping(value = "/auth")
@@ -42,5 +46,11 @@ public class UserController implements UserAPI {
     @PostMapping(value = "/auth/verify")
     public ResponseEntity<RequestResponse> verifyAccount(@RequestBody AccountVerificationRequest request) {
         return userService.verifyAccount(request);
+    }
+
+    @Override
+    @PostMapping(value = "/ticket/submit")
+    public ResponseEntity<RequestResponse> submitReportTicket(@RequestBody NewReportTicket ticket) {
+        return reportTicketService.createTicket(ticket);
     }
 }

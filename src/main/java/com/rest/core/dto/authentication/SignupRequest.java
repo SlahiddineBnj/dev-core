@@ -23,6 +23,7 @@ public class SignupRequest {
                 .username(request.getUsername())
                 .password(new BCryptPasswordEncoder().encode(request.getPassword()))
                 .email(request.getEmail())
+                .ban_counter(0L)
                 .build();
     }
 }

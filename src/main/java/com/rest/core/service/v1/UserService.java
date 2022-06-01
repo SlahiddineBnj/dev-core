@@ -5,6 +5,7 @@ import com.rest.core.dto.response.RequestResponse;
 import com.rest.core.dto.authentication.AuthenticationRequest;
 import com.rest.core.dto.authentication.AuthenticationResponse;
 import com.rest.core.dto.authentication.SignupRequest;
+import com.rest.core.dto.ticket.NewReportTicket;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
@@ -18,4 +19,6 @@ public interface UserService {
     ResponseEntity<RequestResponse> signup(SignupRequest request) throws MessagingException, URISyntaxException, IOException;
 
     ResponseEntity<RequestResponse> verifyAccount(AccountVerificationRequest request) ;
+
+    ResponseEntity<RequestResponse> submitReportTicket(NewReportTicket ticket) ;
 }
